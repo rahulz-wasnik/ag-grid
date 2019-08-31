@@ -10,6 +10,7 @@ import { OrderGridComponent } from './order-grid/order-grid.component';
 import { NumericEditorComponent } from './numeric-editor/numeric-editor.component';
 import { FormState } from 'src/app/store/order-form.state';
 import { PlaceOrderComponent } from './place-order/place-order.component';
+import { OrderDetailsComponent } from './order-details/order-details.component';
 
 @NgModule({
   imports: [
@@ -17,12 +18,13 @@ import { PlaceOrderComponent } from './place-order/place-order.component';
     OrderRoutingModule,
     AgGridModule.withComponents([
       NumericEditorComponent,
-      PlaceOrderComponent
+      PlaceOrderComponent,
+      OrderDetailsComponent
     ]),
     ReactiveFormsModule,
     NgxsModule.forFeature([FormState]),
     NgxsFormPluginModule
   ],
-  declarations: [OrderGridComponent, NumericEditorComponent, PlaceOrderComponent]
+  declarations: [OrderGridComponent, NumericEditorComponent, PlaceOrderComponent, OrderDetailsComponent]
 })
 export class OrderModule { }

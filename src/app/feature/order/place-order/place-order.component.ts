@@ -17,7 +17,10 @@ export class PlaceOrderComponent {
 
   placeOrder(event: Event): void {
     event.stopPropagation();
-    this.params.onClick(this.params.node.id);
+    this.params.onClick({
+      id: this.params.node.id,
+      side: this.params.colDef.field
+    });
   }
 
 }

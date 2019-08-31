@@ -1,26 +1,16 @@
-
-<!-- <form [formGroup]="filtersForm" ngxsForm="formAZA.details">
-    <div>
-        Name: <input type="text" name="name" id="name" formControlName="name">
-    </div>
-    <div>
-        Age : <input type="text" name="age" id="age" formControlName="age">
-    </div>
-</form>
-
-<div>{{ filtersForm.value | json }}</div> -->
-
-<form [formGroup]="formGroup" ngxsForm="formAZA.details">
-    <ag-grid-angular 
-      style="width: 500px; height: 500px;"
-      class="ag-theme-balham" 
-      [rowData]="rowData"
-      [columnDefs]="columnDefs"
-      [frameworkComponents]="getComponents()"
-      [context]="getContext()"
-      [getRowNodeId]="getRowNodeId"
-      (gridReady)="gridReady($event)">
-    </ag-grid-angular>
-</form>
+<div>
+        <form [formGroup]="formGroup" ngxsForm="product.products">
+                <ag-grid-angular 
+                  style="width: 1300px; height: 200px;"
+                  class="ag-theme-balham" 
+                  [rowData]="rowData"
+                  [columnDefs]="columnDefs"
+                  [frameworkComponents]="getComponents()"
+                  [context]="getContext()"
+                  [getRowNodeId]="getRowNodeId"
+                  (gridReady)="gridReady($event)">
+                </ag-grid-angular>
+            </form>
+</div>
 
 <div>{{ formGroup.value | json }}</div>

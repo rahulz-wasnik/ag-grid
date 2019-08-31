@@ -5,6 +5,8 @@ import { NumericEditorComponent } from '../numeric-editor/numeric-editor.compone
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { PlaceOrderComponent } from '../place-order/place-order.component';
+import { FormState } from 'src/app/store/order-form.state';
+import { OrderDetailsComponent } from '../order-details/order-details.component';
 
 @Component({
   selector: 'app-order-grid',
@@ -13,6 +15,10 @@ import { PlaceOrderComponent } from '../place-order/place-order.component';
 })
 export class OrderGridComponent implements OnInit {
 
+  @Select(FormState.orderFormModel) orderFormModel$: Observable<any>;
+  @Select(FormState.orderFormStatus) orderFormStatus$: Observable<any>;
+  @Select(FormState.orderFormDirty) orderFormDirty$: Observable<any>;
+  @Select(FormState.orderFormErrors) orderFormErrors$: Observable<any>;
   
   private api: GridApi;
   private columnApi: ColumnApi;
@@ -21,24 +27,39 @@ export class OrderGridComponent implements OnInit {
 
   columnDefs = [
     { headerName: 'Order #', field: "orderNumber", width: 110, suppressSizeToFit: true },
-    { headerName: 'Volume', field: "volume", cellRenderer: 'formCell' },
-    { headerName: 'Rate', field: "rate", cellRenderer: 'formCell' },
-    { headerName: '', field: "send", cellRenderer: 'placeOrder', cellRendererParams: {
+    { headerName: 'Bid Volume', field: "bidVolume", cellRenderer: 'formCell' },
+    { headerName: 'Bid Rate', field: "bidRate", cellRenderer: 'formCell' },
+    { headerName: '', field: "bid", cellRenderer: 'placeOrder', 
+      cellRendererParams: {
+        onClick: this.placeOrder.bind(this)
+      }
+    },
+    { headerName: '', field: "bidOrderDetails", cellRenderer: 'orderDetails' },
+    { headerName: '', field: "offerOrderDetails", cellRenderer: 'orderDetails' },
+    { headerName: '', field: "offer", cellRenderer: 'placeOrder', 
+      cellRendererParams: {
       onClick: this.placeOrder.bind(this)
-    }}
+      }
+    },
+    { headerName: 'Offer Volume', field: "offerVolume", cellRenderer: 'formCell' },
+    { headerName: 'Offer Rate', field: "offerRate", cellRenderer: 'formCell' }
   ];
 
   rowData = [
-    { orderNumber: 1, volume: 1000, rate: 1.1 },
-    { orderNumber: 2, volume: 2000, rate: 2.2 },
-    { orderNumber: 3, volume: 3000, rate: 3.3 },
-    { orderNumber: 4, volume: 4000, rate: 4.4 },
-    { orderNumber: 5, volume: 5000, rate: 5.5 },
+    { orderNumber: 1 },
+    { orderNumber: 2 },
+    { orderNumber: 3 },
+    { orderNumber: 4 },
+    { orderNumber: 5 },
   ];
 
   constructor( private store: Store, private formBuilder: FormBuilder ) { }
 
   ngOnInit() {
+    this.orderFormModel$.subscribe(value => console.log('model......', value));
+    this.orderFormStatus$.subscribe(value => console.log('status......', value));
+    this.orderFormDirty$.subscribe(value => console.log('dirty......', value));
+    this.orderFormErrors$.subscribe(value => console.log('errors......', value));
   }
 
   gridReady(params: GridReadyEvent) {
@@ -64,7 +85,8 @@ export class OrderGridComponent implements OnInit {
   getComponents() {
     return {
       'formCell': NumericEditorComponent,
-      'placeOrder': PlaceOrderComponent
+      'placeOrder': PlaceOrderComponent,
+      'orderDetails': OrderDetailsComponent
     };
   }
 
@@ -91,8 +113,12 @@ export class OrderGridComponent implements OnInit {
     return `${rowId}${column.getColId()}`;
   }
 
-  private placeOrder(id): void {
-    console.log('Place order is clicked.', id);
+  private placeOrder(obj): void {
+    console.log('Place order is clicked.', obj);
+    // const volumeFieldName = obj.id + obj.side + 'Volume';
+    // const rateFieldName = obj.id + obj.side + 'Rate';
+    // this.formGroup.get(volumeFieldName).disable()
+    // this.formGroup.get(rateFieldName).disable()
   } 
 
 }
