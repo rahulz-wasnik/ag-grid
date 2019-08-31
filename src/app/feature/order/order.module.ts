@@ -7,10 +7,10 @@ import { NgxsModule } from '@ngxs/store';
 
 import { OrderRoutingModule } from './order-routing.module';
 import { OrderGridComponent } from './order-grid/order-grid.component';
-import { NumericEditorComponent } from './numeric-editor/numeric-editor.component';
+import { NumericEditorComponent } from './renderers/numeric-editor/numeric-editor.component';
 import { FormState } from 'src/app/store/order-form.state';
-import { PlaceOrderComponent } from './place-order/place-order.component';
-import { OrderDetailsComponent } from './order-details/order-details.component';
+import { PlaceOrderComponent } from './renderers/place-order/place-order.component';
+import { OrderDetailsComponent } from './renderers/order-details/order-details.component';
 
 @NgModule({
   imports: [

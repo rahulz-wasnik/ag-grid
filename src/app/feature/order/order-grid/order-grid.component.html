@@ -1,16 +1,16 @@
 <div>
-        <form [formGroup]="formGroup" ngxsForm="product.products">
-                <ag-grid-angular 
-                  style="width: 1300px; height: 200px;"
-                  class="ag-theme-balham" 
-                  [rowData]="rowData"
-                  [columnDefs]="columnDefs"
-                  [frameworkComponents]="getComponents()"
-                  [context]="getContext()"
-                  [getRowNodeId]="getRowNodeId"
-                  (gridReady)="gridReady($event)">
-                </ag-grid-angular>
-            </form>
+  <form [formGroup]="formGroup" ngxsForm="order.orderForm">
+    <ag-grid-angular 
+      style="width: 1300px; height: 200px;"
+      class="ag-theme-balham" 
+      [rowData]="rowData"
+      [columnDefs]="columnDefs"
+      [frameworkComponents]="getComponents()"
+      [context]="getContext()"
+      [getRowNodeId]="getRowNodeId"
+      (gridReady)="gridReady($event)">
+    </ag-grid-angular>
+  </form>
 </div>
 
 <div>{{ formGroup.value | json }}</div>

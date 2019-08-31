@@ -3,8 +3,7 @@ import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-numeric-editor',
-  templateUrl: './numeric-editor.component.html',
-  styleUrls: ['./numeric-editor.component.css']
+  templateUrl: './numeric-editor.component.html'
 })
 export class NumericEditorComponent {
 

@@ -2,7 +2,7 @@ import { State, Store, Selector } from "@ngxs/store";
 
 
 @State({
-    name: 'product',
+    name: 'order',
     defaults: {
       orderForm: {
         model: [],
@@ -18,21 +18,21 @@ export class FormState {
 
     @Selector()
     static orderFormModel(state: any): any {
-      return state.products.model;
+      return state.orderForm.model;
     }
 
     @Selector()
     static orderFormDirty(state: any): any {
-      return state.products.dirty;
+      return state.orderForm.dirty;
     }
 
     @Selector()
     static orderFormStatus(state: any): any {
-      return state.products.status;
+      return state.orderForm.status;
     }
 
     @Selector()
     static orderFormErrors(state: any): any {
-      return state.products.errors;
+      return state.orderForm.errors;
     }
 }
