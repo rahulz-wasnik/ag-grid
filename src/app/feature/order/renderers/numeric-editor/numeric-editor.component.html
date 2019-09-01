@@ -1,3 +1,3 @@
 <div *ngIf="formGroup" [formGroup]="formGroup">
-    <input type="number" [formControlName]="key" [id]="key">
+    <input type="number" [formControlName]="key" [id]="key" (input)="onChange($event)">
 </div>

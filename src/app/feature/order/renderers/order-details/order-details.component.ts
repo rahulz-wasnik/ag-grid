@@ -14,7 +14,7 @@ export class OrderDetailsComponent {
 
   agInit(params: any) {
     this.columnName = params.column.colDef.headerName;
-    this.key = params.context.createKey(params.node.id, params.column);
+    this.key = params.context.createFormControlName(params.node.id, params.column);
     this.value = params.value;
   }
 

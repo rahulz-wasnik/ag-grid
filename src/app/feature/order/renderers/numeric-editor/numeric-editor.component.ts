@@ -11,10 +11,12 @@ export class NumericEditorComponent {
   key;
   private value;
   columnName: string;
+  private params;
 
   agInit(params: any) {
+    this.params = params;
     this.columnName = params.column.colDef.headerName;
-    this.key = params.context.createKey(params.node.id, params.column);
+    this.key = params.context.createFormControlName(params.node.id, params.column);
     this.value = params.value;
   }
 
@@ -25,6 +27,14 @@ export class NumericEditorComponent {
     // with the value, so it feels more natural that the control value be set here
     this.formGroup.controls[this.key].patchValue(this.value);
     return true;
+  }
+
+  onChange(event: Event): void {
+    event.stopPropagation();
+    this.params.onValueUpdate({
+      index: this.params.node.id,
+      side: this.params.side
+    });
   }
 
 }

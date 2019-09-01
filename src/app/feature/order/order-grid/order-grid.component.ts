@@ -25,11 +25,31 @@ export class OrderGridComponent implements OnInit {
 
   formGroup: FormGroup = new FormGroup({});
 
+  gridOptions = {
+    defaultColDef: {
+      editable: true
+    },
+    suppressMovableColumns: true,
+    suppressMenuHide: true
+  }
+
   columnDefs = [
     { headerName: '', field: "index", hide: true },
     { headerName: 'Security', field: "security", width: 110, suppressSizeToFit: true },
-    { headerName: 'Bid Volume', field: "bidVolume", cellRenderer: 'formCell' },
-    { headerName: 'Bid Rate', field: "bidRate", cellRenderer: 'formCell' },
+    {
+      headerName: 'Bid Volume', field: "bidVolume", cellRenderer: 'formCell',
+      cellRendererParams: {
+        side: 'bid',
+        onValueUpdate: this.onValueUpdate.bind(this)
+      }
+    },
+    {
+      headerName: 'Bid Rate', field: "bidRate", cellRenderer: 'formCell',
+      cellRendererParams: {
+        side: 'bid',
+        onValueUpdate: this.onValueUpdate.bind(this)
+      }
+    },
     {
       headerName: '', field: "bid", cellRenderer: 'placeOrder',
       cellRendererParams: {
@@ -37,34 +57,36 @@ export class OrderGridComponent implements OnInit {
       }
     },
     { headerName: 'Order', field: "bidOrder", cellRenderer: 'orderDetails' },
-    { headerName: '', field: "offerOrder", cellRenderer: 'orderDetails' },
-    { headerName: '', field: "offer", cellRenderer: 'placeOrder', 
+    { headerName: 'Order', field: "offerOrder", cellRenderer: 'orderDetails' },
+    {
+      headerName: '', field: "offer", cellRenderer: 'placeOrder',
       cellRendererParams: {
-      onClick: this.placeOrder.bind(this)
+        onClick: this.placeOrder.bind(this)
       }
     },
-    { headerName: 'Offer Rate', field: "offerRate", cellRenderer: 'formCell' },
-    { headerName: 'Offer Volume', field: "offerVolume", cellRenderer: 'formCell' }
-  ];
-
-  rowData = [
-    { security: 1 },
-    { security: 2 },
-    { security: 3 },
-    { security: 4 },
-    { security: 5 }
+    {
+      headerName: 'Offer Rate', field: "offerRate", cellRenderer: 'formCell',
+      cellRendererParams: {
+        side: 'offer',
+        onValueUpdate: this.onValueUpdate.bind(this)
+      }
+    },
+    {
+      headerName: 'Offer Volume', field: "offerVolume", cellRenderer: 'formCell',
+      cellRendererParams: {
+        side: 'offer',
+        onValueUpdate: this.onValueUpdate.bind(this)
+      }
+    }
   ];
 
   constructor(private store: Store, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.store.dispatch(new LoadOrder());
-    this.orderFormErrors$.subscribe(value => console.log('errors.......................', value));
-    this.orderFormModel$.subscribe(value => console.log('value................', value));
   }
 
   gridReady(params: GridReadyEvent) {
-    
   }
 
   onRowDataChange(event: RowDataChangedEvent) {
@@ -100,19 +122,20 @@ export class OrderGridComponent implements OnInit {
       suppressColumnMoveAnimation: true,
       suppressMovableColumns: true,
       formGroup: this.formGroup,
-      createKey: this.createKey
+      createFormControlName: this.createFormControlName
     }
   }
 
+  /**
+   * Create form controls
+   */
   private createFormControls() {
     let columns = this.columnApi.getAllColumns();
     this.api.forEachNode((rowNode: RowNode) => {
-      // console.log('rowNode................', rowNode);
       columns.filter(column => column.getColDef().field !== 'security')
         .forEach((column: Column) => {
-          const key = this.createKey(rowNode.id, column);
-          // console.log('column................', key);
-          if(column.getColId() === 'bidVolume') {
+          const key = this.createFormControlName(rowNode.id, column);
+          if (column.getColId() === 'bidVolume') {
             this.formGroup.addControl(key, new FormControl(null, Validators.min(rowNode.data.minVol)))
           } else {
             this.formGroup.addControl(key, new FormControl())
@@ -122,24 +145,55 @@ export class OrderGridComponent implements OnInit {
     });
   }
 
-  private createKey(rowId: string, column: Column): string {
+  /**
+   * Create a unique form control name
+   * @param rowId 
+   * @param column 
+   */
+  private createFormControlName(rowId: string, column: Column): string {
     return `${rowId}${column.getColId()}`;
   }
 
+  /**
+   * Place order
+   * @param obj 
+   */
   private placeOrder(obj: any): void {
     this.store.dispatch(new PlaceOrder(obj));
-    // this.onOrderSuccess(obj);
+    this.onOrderSuccess(obj);
   }
 
+  /**
+   * Reset and disable fields on the other side
+   * @param obj 
+   */
   private onOrderSuccess(obj: any): void {
     const otherSide = obj.side === 'offer' ? 'bid' : 'offer';
     const volumeFieldName = obj.index + otherSide + 'Volume';
     const rateFieldName = obj.index + otherSide + 'Rate';
+    const button = <HTMLButtonElement>document.getElementById(obj.index + otherSide);
     this.formGroup.get(volumeFieldName).reset();
     this.formGroup.get(rateFieldName).reset();
     this.formGroup.get(volumeFieldName).disable();
     this.formGroup.get(rateFieldName).disable();
+    button.disabled = true;
   }
 
+  /**
+   * Enable the place order button only when both corresponding value and rate field have a value
+   * @param obj 
+   */
+  private onValueUpdate(obj: any): void {
+    const volumeFieldName = obj.index + obj.side + 'Volume';
+    const rateFieldName = obj.index + obj.side + 'Rate';
+    const volume = this.formGroup.get(volumeFieldName).value;
+    const rate = this.formGroup.get(rateFieldName).value;
+    const button = <HTMLButtonElement>document.getElementById(obj.index + obj.side);
+    if(volume && rate) {
+      button.disabled = false;
+    } else {
+      button.disabled = true;
+    }
+  }
 
 }

@@ -4,6 +4,7 @@
       style="width: 1300px; height: 200px;"
       class="ag-theme-balham" 
       [rowData]="instruments$ | async"
+      [gridOptions]="gridOptions"
       [columnDefs]="columnDefs"
       [frameworkComponents]="getComponents()"
       [context]="getContext()"
