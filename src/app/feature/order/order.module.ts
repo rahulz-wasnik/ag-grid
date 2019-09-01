@@ -8,7 +8,7 @@ import { NgxsModule } from '@ngxs/store';
 import { OrderRoutingModule } from './order-routing.module';
 import { OrderGridComponent } from './order-grid/order-grid.component';
 import { NumericEditorComponent } from './renderers/numeric-editor/numeric-editor.component';
-import { FormState } from 'src/app/store/order-form.state';
+import { OrderState } from 'src/app/store/order.state';
 import { PlaceOrderComponent } from './renderers/place-order/place-order.component';
 import { OrderDetailsComponent } from './renderers/order-details/order-details.component';
 
@@ -22,7 +22,7 @@ import { OrderDetailsComponent } from './renderers/order-details/order-details.c
       OrderDetailsComponent
     ]),
     ReactiveFormsModule,
-    NgxsModule.forFeature([FormState]),
+    NgxsModule.forFeature([OrderState]),
     NgxsFormPluginModule
   ],
   declarations: [OrderGridComponent, NumericEditorComponent, PlaceOrderComponent, OrderDetailsComponent]

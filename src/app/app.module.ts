@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from 'src/environments/environment';
-import { FormState } from './store/order-form.state';
-import { ReactiveFormsModule } from '@angular/forms';
+import { DbService } from './service/db.service';
 
 @NgModule({
   declarations: [
@@ -18,11 +20,13 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    InMemoryWebApiModule.forRoot(DbService),
     NgxsModule.forRoot([]),
     NgxsFormPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot({ 
       disabled: environment.production 
     }),
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -16,7 +16,6 @@ export class NumericEditorComponent {
     this.columnName = params.column.colDef.headerName;
     this.key = params.context.createKey(params.node.id, params.column);
     this.value = params.value;
-    // console.log(params);
   }
 
   refresh(params: any): boolean {

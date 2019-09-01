@@ -3,14 +3,17 @@
     <ag-grid-angular 
       style="width: 1300px; height: 200px;"
       class="ag-theme-balham" 
-      [rowData]="rowData"
+      [rowData]="instruments$ | async"
       [columnDefs]="columnDefs"
       [frameworkComponents]="getComponents()"
       [context]="getContext()"
       [getRowNodeId]="getRowNodeId"
-      (gridReady)="gridReady($event)">
+      (gridReady)="gridReady($event)"
+      (rowDataChanged)="onRowDataChange($event)">
     </ag-grid-angular>
   </form>
 </div>
 
 <div>{{ formGroup.value | json }}</div>
+<div>{{ formGroup.valid }}</div>
+<div>{{ formGroup.dirty }}</div>
