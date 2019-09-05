@@ -1,15 +1,16 @@
 <div>
   <form [formGroup]="formGroup" ngxsForm="order.orderForm">
-    <ag-grid-angular 
-      style="width: 1300px; height: 200px;"
+    <ag-grid-angular
       class="ag-theme-balham" 
-      [rowData]="instruments$ | async"
+      style="width: 1300px; height: 200px;"
+      [rowData]="instruments"
       [gridOptions]="gridOptions"
       [columnDefs]="columnDefs"
       [frameworkComponents]="getComponents()"
       [context]="getContext()"
       [getRowNodeId]="getRowNodeId"
       (gridReady)="gridReady($event)"
+      (firstDataRendered)="onFirstDataRendered($event)"
       (rowDataChanged)="onRowDataChange($event)">
     </ag-grid-angular>
   </form>

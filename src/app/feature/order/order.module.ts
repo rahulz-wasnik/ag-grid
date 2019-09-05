@@ -11,6 +11,7 @@ import { NumericEditorComponent } from './renderers/numeric-editor/numeric-edito
 import { OrderState } from 'src/app/store/order.state';
 import { PlaceOrderComponent } from './renderers/place-order/place-order.component';
 import { OrderDetailsComponent } from './renderers/order-details/order-details.component';
+import { OrderGridContainerComponent } from './order-grid/order-gird-container.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,6 @@ import { OrderDetailsComponent } from './renderers/order-details/order-details.c
     NgxsModule.forFeature([OrderState]),
     NgxsFormPluginModule
   ],
-  declarations: [OrderGridComponent, NumericEditorComponent, PlaceOrderComponent, OrderDetailsComponent]
+  declarations: [OrderGridComponent, NumericEditorComponent, PlaceOrderComponent, OrderDetailsComponent, OrderGridContainerComponent]
 })
 export class OrderModule { }

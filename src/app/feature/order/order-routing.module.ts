@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { OrderGridComponent } from './order-grid/order-grid.component';
+import { OrderGridContainerComponent } from './order-grid/order-gird-container.component';
 
 const routes: Routes = [
-  { path: '', component: OrderGridComponent },
+  { path: '', component: OrderGridContainerComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { GridApi, ColumnApi, RowNode, Column, GridReadyEvent, RowDataChangedEvent } from 'ag-grid-community';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -8,17 +8,17 @@ import { OrderState } from '../../../store/order.state';
 import { OrderDetailsComponent } from '../renderers/order-details/order-details.component';
 import { NumericEditorComponent } from '../renderers/numeric-editor/numeric-editor.component';
 import { PlaceOrder, LoadOrder } from 'src/app/store/order.action';
+import { FirstDataRenderedEvent } from 'ag-grid-community/dist/lib/events';
 
 @Component({
   selector: 'app-order-grid',
   templateUrl: './order-grid.component.html',
-  styleUrls: ['./order-grid.component.css']
+  styleUrls: ['./order-grid.component.css'] ,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrderGridComponent implements OnInit {
 
-  @Select(OrderState.orderFormModel) orderFormModel$: Observable<any>;
-  @Select(OrderState.orderFormErrors) orderFormErrors$: Observable<any>;
-  @Select(OrderState.instruments) instruments$: Observable<any>;
+  @Input() instruments: any[];
 
   private api: GridApi;
   private columnApi: ColumnApi;
@@ -89,16 +89,16 @@ export class OrderGridComponent implements OnInit {
   gridReady(params: GridReadyEvent) {
   }
 
-  onRowDataChange(event: RowDataChangedEvent) {
+  onFirstDataRendered(event: FirstDataRenderedEvent) {
     this.api = event.api;
     this.columnApi = event.columnApi;
-
-    // slight chicken and egg here - the grid cells will be created before the grid is ready, but we need set
-    // formGroup up front as such we'll create the grid (and cells) and force refresh the cells FormCellComponent
-    // will then set the form in the refresh, completing the loop  this is only necessary once, on initialisation
     this.createFormControls();
     this.api.refreshCells({ force: true });
+  }
 
+  onRowDataChange(event: RowDataChangedEvent) {
+    this.api = event.api;
+    this.api.refreshCells({ force: true });
     this.api.sizeColumnsToFit();
   }
 
@@ -132,7 +132,7 @@ export class OrderGridComponent implements OnInit {
   private createFormControls() {
     let columns = this.columnApi.getAllColumns();
     this.api.forEachNode((rowNode: RowNode) => {
-      columns.filter(column => column.getColDef().field !== 'security')
+      columns.filter(column => (column.getColDef().field !== 'security'))
         .forEach((column: Column) => {
           const key = this.createFormControlName(rowNode.id, column);
           if (column.getColId() === 'bidVolume') {
